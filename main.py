@@ -13,7 +13,7 @@ criterion_d=SoftmaxWithLoss()
 criterion_g=SoftmaxWithLoss()
 
 a=np.random.randn(batch_size,28,1,1)
-G=Generater(input_size=28,output_size=1)
+G=Generator(input_size=28,output_size=1)
 D=Discriminator()
 
 data=load_MNIST(batch=batch_size)
@@ -21,12 +21,12 @@ data=load_MNIST(batch=batch_size)
 imgs=[]
 for images,labels in data:
     imgs.append(images.numpy())
-    
+
 #リアルのラベルとフェイクのラベルを作成
 t_f=np.zeros(batch_size,int)
 t_r=np.ones(batch_size,int)
 t=np.append(t_r,t_f)
-    
+
 
 
 for epoch in range(200):
@@ -35,15 +35,15 @@ for epoch in range(200):
         #フェイク画像生成
         fake=G.predict(a)
         #Discriminatorでフェイク画像を判定
-        pre_f=D.predict(fake)   
+        pre_f=D.predict(fake)
         #Generater側の損失
         loss_g=criterion_g.forward(pre_f,t_r)
-    
+
         #Generator側の勾配
         dout=criterion_g.backward()
         _,dout=D.gradient(dout)
         grad_g=G.gradient(dout)
-    
+
         #Discriminatorで真偽判定
         d_img=np.vstack([imgs[i],fake])
         pre=D.predict(d_img)
@@ -52,12 +52,10 @@ for epoch in range(200):
         #Discriminator側の勾配
         dout=criterion_d.backward()
         grad_d,_=D.gradient(dout)
-    
+
         print(loss_d,loss_g)
-    
+
         optimizer_g.update(G.params,grad_g)
         optimizer_d.update(D.params,grad_d)
 with open('learned/save.pkl','wb') as f:
     pickle.dump(G.params,f)
-
-    
