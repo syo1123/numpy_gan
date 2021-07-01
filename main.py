@@ -6,7 +6,7 @@ import pickle
 from make_data import load_MNIST
 import matplotlib.pyplot as plt
 
-optimizer_g=Adam(lr=0.4)
+optimizer_g=Adam(lr=0.04)
 optimizer_d=Adam(lr=0.000001)
 batch_size=32
 
