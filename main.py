@@ -5,15 +5,14 @@ from Optimizer import Adam
 import pickle
 from make_data import load_MNIST
 
-optimizer_g=Adam(lr=0.4)
-optimizer_d=Adam(lr=0.01)
+optimizer_g=Adam(lr=0.2)
+optimizer_d=Adam(lr=0.000001)
 batch_size=32
 
 criterion_d=SoftmaxWithLoss()
 criterion_g=SoftmaxWithLoss()
 
-a=np.random.randn(batch_size,28,1,1)
-G=Generator(input_size=28,output_size=1)
+G=Generator(input_size=120,output_size=1)
 D=Discriminator()
 
 data=load_MNIST(batch=batch_size)
@@ -29,10 +28,11 @@ t=np.append(t_r,t_f)
 
 
 
-for epoch in range(200):
+for epoch in range(3):
     print("Epoch{}".format(epoch))
     for i in range(len(imgs)):
         #フェイク画像生成
+        a=np.random.randn(batch_size,120,1,1)
         fake=G.predict(a)
         #Discriminatorでフェイク画像を判定
         pre_f=D.predict(fake)
