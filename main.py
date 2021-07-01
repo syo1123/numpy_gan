@@ -4,6 +4,7 @@ from layers import *
 from Optimizer import Adam
 import pickle
 from make_data import load_MNIST
+import matplotlib.pyplot as plt
 
 optimizer_g=Adam(lr=0.2)
 optimizer_d=Adam(lr=0.000001)
@@ -12,7 +13,7 @@ batch_size=32
 criterion_d=SoftmaxWithLoss()
 criterion_g=SoftmaxWithLoss()
 
-G=Generator(input_size=120,output_size=1)
+G=Generater(input_size=120,output_size=1)
 D=Discriminator()
 
 data=load_MNIST(batch=batch_size)
@@ -31,8 +32,8 @@ t=np.append(t_r,t_f)
 for epoch in range(3):
     print("Epoch{}".format(epoch))
     for i in range(len(imgs)):
-        #フェイク画像生成
         a=np.random.randn(batch_size,120,1,1)
+        #フェイク画像生成
         fake=G.predict(a)
         #Discriminatorでフェイク画像を判定
         pre_f=D.predict(fake)
@@ -53,9 +54,10 @@ for epoch in range(3):
         dout=criterion_d.backward()
         grad_d,_=D.gradient(dout)
 
-        print(loss_d,loss_g)
+        print("Epoch{} Loss={}".format(epoch,(loss_d,loss_g)))
 
         optimizer_g.update(G.params,grad_g)
         optimizer_d.update(D.params,grad_d)
+
 with open('learned/save.pkl','wb') as f:
     pickle.dump(G.params,f)

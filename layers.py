@@ -18,18 +18,36 @@ class Relu:
 
         return dx
 
+class Dropout:
+    """
+    http://arxiv.org/abs/1207.0580
+    """
+    def __init__(self, dropout_ratio=0.5):
+        self.dropout_ratio = dropout_ratio
+        self.mask = None
+
+    def forward(self, x, train_flg=True):
+        if train_flg:
+            self.mask = np.random.rand(*x.shape) > self.dropout_ratio
+            return x * self.mask
+        else:
+            return x * (1.0 - self.dropout_ratio)
+
+    def backward(self, dout):
+        return dout * self.mask
+
 class BatchNormalization:
 
     def __init__(self, gamma, beta, momentum=0.9, running_mean=None, running_var=None):
         self.gamma = gamma
         self.beta = beta
         self.momentum = momentum
-        self.input_shape = None 
+        self.input_shape = None
 
 
         self.running_mean = running_mean
-        self.running_var = running_var  
-        
+        self.running_var = running_var
+
         self.batch_size = None
         self.xc = None
         self.std = None
@@ -43,33 +61,33 @@ class BatchNormalization:
             x = x.reshape(N, -1)
 
         out = self.__forward(x, train_flg)
-        
+
         return out.reshape(*self.input_shape)
-            
+
     def __forward(self, x, train_flg):
         if self.running_mean is None:
             N, D = x.shape
             self.running_mean = np.zeros(D)
             self.running_var = np.zeros(D)
-                        
+
         if train_flg:
             mu = x.mean(axis=0)
             xc = x - mu
             var = np.mean(xc**2, axis=0)
             std = np.sqrt(var + 10e-7)
             xn = xc / std
-            
+
             self.batch_size = x.shape[0]
             self.xc = xc
             self.xn = xn
             self.std = std
             self.running_mean = self.momentum * self.running_mean + (1-self.momentum) * mu
-            self.running_var = self.momentum * self.running_var + (1-self.momentum) * var            
+            self.running_var = self.momentum * self.running_var + (1-self.momentum) * var
         else:
             xc = x - self.running_mean
             xn = xc / ((np.sqrt(self.running_var + 10e-7)))
-            
-        out = self.gamma * xn + self.beta 
+
+        out = self.gamma * xn + self.beta
         return out
 
     def backward(self, dout):
@@ -92,14 +110,14 @@ class BatchNormalization:
         dxc += (2.0 / self.batch_size) * self.xc * dvar
         dmu = np.sum(dxc, axis=0)
         dx = dxc - dmu / self.batch_size
-        
+
         self.dgamma = dgamma
         self.dbeta = dbeta
-        
+
         return dx
 
 
-    
+
 
 class ConvolutionT:
     def __init__(self,W,stride=1,pad=0):
@@ -112,7 +130,7 @@ class ConvolutionT:
         self.params=[self.W,0]
         self.grads=[np.zeros_like(self.W),self.b]
         self.dW=None
-                
+
     def forward(self,x):
         N,in_c,H,W=x.shape
         out_c,in_c,filter_h,filter_w=self.W.shape
@@ -131,9 +149,9 @@ class ConvolutionT:
                         m=np.dot(v,w_e).reshape(filter_h,filter_w)
                         im[n,c,h:h+filter_h,w:w+filter_w]+=m
         self.im=im
-                        
+
         return im
-    
+
     def backward(self,dout):
         fn,fc,fh,fw=self.W.shape
         f_W=self.W.transpose(1,0,3,2)
@@ -144,7 +162,7 @@ class ConvolutionT:
 
         col = im2col(dout, FH, FW, self.stride, self.pad)
         col_W = f_W.reshape(FN, -1).T
-        
+
         col_x=self.x.reshape(FN,-1).T
 
         dout = np.dot(col, col_W)
@@ -153,25 +171,25 @@ class ConvolutionT:
         dout = dout.reshape(N, out_h, out_w, -1).transpose(0, 3, 1, 2)
 
 
-        
+
         return dout
-    
-    
+
+
 class Convolution:
     def __init__(self, W, stride=1, pad=0):
         self.W = W
         self.stride = stride
         self.pad = pad
-        
-        
+
+
         self.params=[W]
         self.gragds=[np.zeros_like(W)]
-        
+
         # 中間データ（backward時に使用）
-        self.x = None   
+        self.x = None
         self.col = None
         self.col_W = None
-        
+
         # 重み・バイアスパラメータの勾配
         self.dW = None
         self.db = None
@@ -185,7 +203,7 @@ class Convolution:
         col = im2col(x, FH, FW, self.stride, self.pad)
         col_W = self.W.reshape(FN, -1).T
 
-        out = np.dot(col, col_W) 
+        out = np.dot(col, col_W)
         out = out.reshape(N, out_h, out_w, -1).transpose(0, 3, 1, 2)
 
         self.x = x
@@ -206,12 +224,12 @@ class Convolution:
         dx = col2im(dcol, self.x.shape, FH, FW, self.stride, self.pad)
 
         return dx
-    
-    
+
+
 class Affine:
     def __init__(self, W):
         self.W =W
-        
+
         self.x = None
         self.original_x_shape = None
         self.dW = None
@@ -228,33 +246,31 @@ class Affine:
     def backward(self, dout):
         dx = np.dot(dout, self.W.T)
         self.dW = np.dot(self.x.T, dout)
-        
+
         dx = dx.reshape(*self.original_x_shape)
         return dx
-    
-    
+
+
 class SoftmaxWithLoss:
     def __init__(self):
         self.loss = None
-        self.y = None 
-        self.t = None 
+        self.y = None
+        self.t = None
 
     def forward(self, x, t):
         self.t = t
         self.y = softmax(x)
         self.loss = cross_entropy_error(self.y, self.t)
-        
+
         return self.loss
 
     def backward(self, dout=1):
         batch_size = self.t.shape[0]
-        if self.t.size == self.y.size: 
+        if self.t.size == self.y.size:
             dx = (self.y - self.t) / batch_size
         else:
             dx = self.y.copy()
             dx[np.arange(batch_size), self.t] -= 1
             dx = dx / batch_size
-        
+
         return dx
-    
-  
