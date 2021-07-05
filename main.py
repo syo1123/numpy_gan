@@ -13,7 +13,7 @@ except:
 import numpy as np
 optimizer_g=Adam(lr=0.0004)
 optimizer_d=Adam(lr=0.00001)
-batch_size=64
+batch_size=32
 
 criterion_d=SoftmaxWithLoss()
 criterion_g=SoftmaxWithLoss()
