@@ -57,7 +57,7 @@ for epoch in range(3):
 
         #Discriminator側の勾配
         dout=criterion_d.backward()
-        grad_d,_=D.gradient(dout)
+        grad_d,_=D.gradient(dout=dout)
 
         print("Epoch{} Loss={}".format(epoch,(loss_d,loss_g)))
 
