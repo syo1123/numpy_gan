@@ -5,11 +5,12 @@ from Optimizer import Adam
 import pickle
 from make_data import load_MNIST
 import matplotlib.pyplot as plt
-try:
+"""try:
     import cupy as np
     print("use cupy!")
 except:
-    import numpy as np
+    import numpy as np"""
+import numpy as np
 optimizer_g=Adam(lr=0.004)
 optimizer_d=Adam(lr=0.000001)
 batch_size=64

@@ -1,9 +1,14 @@
 import torch
 import torchvision
 import torchvision.transforms as transforms
+"""try:
+    import cupy as np
+    print("use cupy!")
+except:
+    import numpy as np"""
 import numpy as np
 
- 
+
 import torch
 import torch.nn.functional as f
 from torch.utils.data import DataLoader
@@ -22,5 +27,5 @@ def load_MNIST(batch=32, intensity=1.0):
                        ])),
         batch_size=batch,
         shuffle=True)
-    
+
     return train_loader
