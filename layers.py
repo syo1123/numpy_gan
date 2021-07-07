@@ -1,9 +1,11 @@
-"""try:
+try:
     import cupy as np
     print("use cupy!")
 except:
-    import numpy as np"""
+    import numpy as np
+"""
 import numpy as np
+"""
 from utils import *
 
 class Relu:
@@ -125,61 +127,42 @@ class BatchNormalization:
 
 
 class ConvolutionT:
-    def __init__(self,W,stride=1,pad=0):
+    def __init__(self,W,stride=2,stride_f=1,pad=1):
+        self.pad=pad
+        self.stride=stride
         self.W=W
-        self.stride,self.pad=stride,pad
+        
+        # 中間データ（backward時に使用）
+        self.x = None
+        self.col = None
+        self.col_W = None
 
-        self.b=None
-        self.x=None
-        self.im=None
-        self.params=[self.W,0]
-        self.grads=[np.zeros_like(self.W),self.b]
-        self.dW=None
-
+        # 重み・バイアスパラメータの勾配
+        self.dW = None
+        self.Conv=Convolution(self.W,stride=stride_f,pad=self.pad)
+        
     def forward(self,x):
-        N,in_c,H,W=x.shape
-        out_c,in_c,filter_h,filter_w=self.W.shape
-
-        self.x=x
-        x=im2colT(x)
-        out_h=self.stride*H-(2*self.pad-filter_h)-1
-        out_w=self.stride*W-(2*self.pad-filter_w)-1
-        im=np.zeros([N,out_c,out_h,out_w])
-        for n in range(N):
-            for h in range(H):
-                for c in range(out_c):
-                    for w in range(W):
-                        w_e=self.W[c].reshape(in_c,filter_h*filter_w)
-                        v=x[n][h][w].reshape(1,-1)
-                        m=np.dot(v,w_e).reshape(filter_h,filter_w)
-                        im[n,c,h:h+filter_h,w:w+filter_w]+=m
-        self.im=im
-
-        return im
-
+        N, C, H, W = x.shape
+        pad_h=H+H*(self.stride-1)
+        pad_w=W+W*(self.stride-1)
+        self.x=np.zeros([N,C,pad_h,pad_w])
+        self.x[:, :, ::self.stride, ::self.stride]=x
+                        
+        self.out=self.Conv.forward(self.x)
+        return self.out
+    
     def backward(self,dout):
-        fn,fc,fh,fw=self.W.shape
-        f_W=self.W.transpose(1,0,3,2)
-        FN, FC, FH, FW = f_W.shape
         N, C, H, W = dout.shape
-        out_h = 1 + int((H + 2*self.pad - FH) / self.stride)
-        out_w = 1 + int((W + 2*self.pad - FW) / self.stride)
+        dx=self.Conv.backward(dout)
+        H_ = int(H/2)
+        W_ = int(W/2)
+        dx_ = np.zeros((1, 1, H_, W_), dtype=np.float32)
+        dx_ = dx[:, :, ::self.stride, ::self.stride]
+        
+        self.dW=self.Conv.dW
+        return dx_
 
-        col = im2col(dout, FH, FW, self.stride, self.pad)
-        col_W = f_W.reshape(FN, -1).T
-
-        col_x=self.x.reshape(FN,-1).T
-
-        dout = np.dot(col, col_W)
-        self.dW=np.dot(col_x.T,col)
-        self.dW = self.dW.transpose(1, 0).reshape(fn,fc,fh,fw)
-        dout = dout.reshape(N, out_h, out_w, -1).transpose(0, 3, 1, 2)
-
-
-
-        return dout
-
-
+    
 class Convolution:
     def __init__(self, W, stride=1, pad=0):
         self.W = W

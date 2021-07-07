@@ -1,9 +1,11 @@
-"""try:
+try:
     import cupy as np
     print("use cupy!")
 except:
-    import numpy as np"""
+    import numpy as np
+"""
 import numpy as np
+"""
 
 class Adam:
 

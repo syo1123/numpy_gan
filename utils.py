@@ -1,9 +1,11 @@
-"""try:
+try:
     import cupy as np
     print("use cupy!")
 except:
-    import numpy as np"""
+    import numpy as np
+"""
 import numpy as np
+"""
 
 def im2col(input_data, filter_h, filter_w, stride=1, pad=0):
 

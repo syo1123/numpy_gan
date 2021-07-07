@@ -3,28 +3,46 @@ from model import *
 from layers import *
 from Optimizer import Adam
 import pickle
-from make_data import load_MNIST
+from make_data import *
 import matplotlib.pyplot as plt
-"""try:
+try:
     import cupy as np
     print("use cupy!")
 except:
-    import numpy as np"""
+    import numpy as np
+"""
 import numpy as np
+"""
 optimizer_g=Adam(lr=0.0004)
 optimizer_d=Adam(lr=0.000001)
-batch_size=32
+batch_size=64
 
 criterion_d=SoftmaxWithLoss()
 criterion_g=SoftmaxWithLoss()
 
-G=Generater(input_size=120,output_size=1)
+G=Generater(input_size=20,output_size=1)
 D=Discriminator()
 
-data=load_MNIST(batch=batch_size)
+#data=load_MNIST(batch=batch_size)
+# DataLoaderの作成と動作確認
+
+# ファイルリストを作成
+train_img_list=make_datapath_list()
+
+# Datasetを作成
+mean = (0.5,)
+std = (0.5,)
+train_dataset = GAN_Img_Dataset(
+    file_list=train_img_list, transform=ImageTransform(mean, std))
+
+# DataLoaderを作成
+
+
+data = torch.utils.data.DataLoader(
+    train_dataset, batch_size=batch_size, shuffle=True)
 
 imgs=[]
-for images,labels in data:
+for images in data:
     imgs.append(images.numpy())
 
 #リアルのラベルとフェイクのラベルを作成
@@ -37,7 +55,7 @@ t=np.append(t_r,t_f)
 for epoch in range(3):
     print("Epoch{}".format(epoch))
     for i in range(len(imgs)):
-        a=np.random.randn(batch_size,120,1,1)
+        a=np.random.randn(imgs[i].shape[0],20,1,1)
         #フェイク画像生成
         fake=G.predict(a)
         #Discriminatorでフェイク画像を判定
