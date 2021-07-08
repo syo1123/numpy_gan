@@ -4,7 +4,6 @@ import zipfile
 import tarfile
 
 import matplotlib.pyplot as plt
-%matplotlib inline
 from PIL import Image
 import numpy as np
 from sklearn.datasets import fetch_openml
@@ -14,8 +13,8 @@ data_dir = "./data/"
 if not os.path.exists(data_dir):
     os.mkdir(data_dir)
 
-#mnist = fetch_openml('mnist_784', version=1, data_home="./data/")  
-mnist = fetch_openml('mnist_784', version=1, data_home="./data/")  
+#mnist = fetch_openml('mnist_784', version=1, data_home="./data/")
+mnist = fetch_openml('mnist_784', version=1, data_home="./data/")
 # data_homeは保存先を指定します
 # Issue #153 2020年12月にリリースされたsklearn 0.24.0以降の仕様変更に合わせる場合
 
