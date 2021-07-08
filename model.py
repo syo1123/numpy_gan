@@ -14,11 +14,11 @@ class Generater:
 
     def __init__(self,input_size=24,output_size=1,weight_init_std = 0.01,train=False):
         self.params = {}
-        self.params['W1'] = np.random.randn(64,20,4,4)
-        self.params['W2'] = np.random.randn(32,64,4,4)
-        self.params['W3'] = np.random.randn(16,32,4,4)
-        self.params['W4'] = np.random.randn(8,16,4,4)
-        self.params['W5'] = np.random.randn(1,8,3,3)
+        self.params['W1'] = np.random.randn(64*4,20,4,4)
+        self.params['W2'] = np.random.randn(62*3,64*4,4,4)
+        self.params['W3'] = np.random.randn(64,64*2,4,4)
+        self.params['W4'] = np.random.randn(32,64,4,4)
+        self.params['W5'] = np.random.randn(1,32,3,3)
 
         path='learned/save.pkl'
         if train:
@@ -30,9 +30,11 @@ class Generater:
         self.layers['ConvT1'] = ConvolutionT(self.params['W1'],stride=2,stride_f=1,pad=2)
         self.layers['BatchN1'] = BatchNormalization(gamma=0.9,beta=0.1)
         self.layers['ReLu1']=Relu()
+        self.layers['Dropout1']=Dropout()
         self.layers['ConvT2'] = ConvolutionT(self.params['W2'],stride=2,stride_f=1,pad=2)
         self.layers['BatchN2'] = BatchNormalization(gamma=0.9,beta=0.1)
         self.layers['ReLu2']=Relu()
+        self.layers['Dropout2']=Dropout()
         self.layers['ConvT3'] = ConvolutionT(self.params['W3'],stride=2,stride_f=1,pad=2)
         self.layers['BatchN3'] = BatchNormalization(gamma=0.9,beta=0.1)
         self.layers['ReLu3']=Relu()

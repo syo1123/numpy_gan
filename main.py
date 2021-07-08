@@ -13,8 +13,8 @@ except:
 """
 import numpy as np
 """
-optimizer_g=Adam(lr=0.0004)
-optimizer_d=Adam(lr=0.000001)
+optimizer_g=Adam(lr=0.000000004)
+optimizer_d=Adam(lr=0.0000000001)
 batch_size=64
 
 criterion_d=SoftmaxWithLoss()
@@ -52,10 +52,15 @@ t=np.append(t_r,t_f)
 
 
 
-for epoch in range(3):
+for epoch in range(200):
     print("Epoch{}".format(epoch))
     for i in range(len(imgs)):
-        a=np.random.randn(imgs[i].shape[0],20,1,1)
+        batch_size=imgs[i].shape[0]
+        a=np.random.randn(batch_size,20,1,1)
+        t_f=np.zeros(batch_size,int)
+        t_r=np.ones(batch_size,int)
+        t=np.append(t_r,t_f)
+
         #フェイク画像生成
         fake=G.predict(a)
         #Discriminatorでフェイク画像を判定
@@ -81,6 +86,8 @@ for epoch in range(3):
 
         optimizer_g.update(G.params,grad_g)
         optimizer_d.update(D.params,grad_d)
+
+
 
 with open('learned/save.pkl','wb') as f:
     pickle.dump(G.params,f)
