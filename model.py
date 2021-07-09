@@ -42,6 +42,7 @@ class Generater:
         self.layers['BatchN4'] = BatchNormalization(gamma=0.9,beta=0.1)
         self.layers['ReLu4']=Relu()
         self.layers['ConvT5'] = ConvolutionT(self.params['W5'],stride=2,stride_f=1,pad=2)
+        self.layers['ReLu5']=Relu()
 
 
 
