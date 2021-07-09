@@ -13,8 +13,8 @@ except:
 """
 import numpy as np
 """
-optimizer_g=Adam(lr=0.000000004)
-optimizer_d=Adam(lr=0.0000000000001)
+optimizer_g=Adam(lr=0.0001)
+optimizer_d=Adam(lr=0.0004)
 batch_size=64
 
 criterion_d=SoftmaxWithLoss()
