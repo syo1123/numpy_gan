@@ -1,4 +1,5 @@
 
+# -*- coding: utf-8 -*-
 from model import *
 from layers import *
 from Optimizer import Adam
@@ -15,8 +16,8 @@ import numpy as np
 """
 beta1=0.0
 beta2=0.9
-optimizer_g=Adam(lr=0.0001,beta1=beta1,beta2=beta2)
-optimizer_d=Adam(lr=0.0004,beta1=beta1,beta2=beta2)
+optimizer_g=Adam(lr=0.0000001,beta1=beta1,beta2=beta2)
+optimizer_d=Adam(lr=0.0000004,beta1=beta1,beta2=beta2)
 batch_size=64
 
 criterion_d=SoftmaxWithLoss()
@@ -26,7 +27,7 @@ G=Generater(input_size=20,output_size=1)
 D=Discriminator()
 
 #data=load_MNIST(batch=batch_size)
-# DataLoaderの作成と動作確認
+#DataLoaderの作成と動作確認
 
 # ファイルリストを作成
 train_img_list=make_datapath_list()
