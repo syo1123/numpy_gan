@@ -84,7 +84,7 @@ class Discriminator:
 
         self.params['W1']=np.random.randn(3,1,6,6)
         self.params['W2']=np.random.randn(8,3,6,6)
-        self.params['W3']=np.random.randn(2,8,6,6)
+        self.params['W3']=np.random.randn(12,8,6,6)
         #self.params['W4']=np.random.randn(32,12,4,4)
         self.params['W5']=np.random.randn(12,2)
 
