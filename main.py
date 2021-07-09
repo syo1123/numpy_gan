@@ -52,7 +52,7 @@ for images in data:
 
 
 
-for epoch in range(2):
+for epoch in range(200):
     print("Epoch{}".format(epoch))
     for i in range(len(imgs)):
         batch_size=imgs[i].shape[0]
