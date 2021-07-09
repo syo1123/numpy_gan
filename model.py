@@ -30,18 +30,18 @@ class Generater:
         self.layers = OrderedDict()
 
         self.layers['ConvT1'] = ConvolutionT(self.params['W1'],stride=2,stride_f=1,pad=2)
-        #self.layers['BatchN1'] = BatchNormalization(gamma=0.9,beta=0.1)
+        self.layers['BatchN1'] = BatchNormalization(gamma=0.3,beta=0.1)
         self.layers['ReLu1']=Relu()
         self.layers['Dropout1']=Dropout()
         self.layers['ConvT2'] = ConvolutionT(self.params['W2'],stride=2,stride_f=1,pad=2)
-        #self.layers['BatchN2'] = BatchNormalization(gamma=0.9,beta=0.1)
+        self.layers['BatchN2'] = BatchNormalization(gamma=0.3,beta=0.1)
         self.layers['ReLu2']=Relu()
         self.layers['Dropout2']=Dropout()
         self.layers['ConvT3'] = ConvolutionT(self.params['W3'],stride=2,stride_f=1,pad=2)
-        #self.layers['BatchN3'] = BatchNormalization(gamma=0.9,beta=0.1)
+        self.layers['BatchN3'] = BatchNormalization(gamma=0.3,beta=0.1)
         self.layers['ReLu3']=Relu()
         self.layers['ConvT4'] = ConvolutionT(self.params['W4'],stride=2,stride_f=1,pad=2)
-        #self.layers['BatchN4'] = BatchNormalization(gamma=0.9,beta=0.1)
+        self.layers['BatchN4'] = BatchNormalization(gamma=0.3,beta=0.1)
         self.layers['ReLu4']=Relu()
         self.layers['ConvT5'] = ConvolutionT(self.params['W5'],stride=2,stride_f=1,pad=2)
         self.layers['Tanh']=Tanh()
@@ -53,6 +53,16 @@ class Generater:
     def predict(self, x):
         for layer in self.layers.values():
             x = layer.forward(x)
+        self.x=x
+        return x
+
+    def gen(self, x):
+        n=np.arange(1,12,4)
+        for i,layer in enumerate(self.layers.values()):
+            if i in n[i]:
+                x = layer.forward(x,train_flg=True)
+            else:
+                x=layer.forward(x)
         self.x=x
         return x
 
@@ -112,6 +122,8 @@ class Discriminator:
             x = layer.forward(x)
         self.x=x
         return x
+
+
 
 
     def gradient(self,dout=None):
