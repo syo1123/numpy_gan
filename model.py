@@ -92,17 +92,17 @@ class Discriminator:
         self.layers = OrderedDict()
         self.layers['Conv1'] = Convolution(self.params['W1'],stride=3,pad=1)
         self.layers['ReLu1']=Relu()
-        #self.layers['Dropout1']=Dropout()
+        self.layers['Dropout1']=Dropout()
         self.layers['Conv2'] = Convolution(self.params['W2'],stride=3,pad=0)
         self.layers['ReLu2']=Relu()
-        #self.layers['Dropout2']=Dropout()
+        self.layers['Dropout2']=Dropout()
         self.layers['Conv3'] = Convolution(self.params['W3'],stride=3,pad=0)
         self.layers['ReLu3']=Relu()
-        #self.layers['Dropout3']=Dropout()
+        self.layers['Dropout3']=Dropout()
         #self.layers['Conv4'] = Convolution(self.params['W4'],stride=1,pad=0)
         #self.layers['ReLu4']=Relu()
-        #self.layers['Affine']=Affine(self.params['W5'])
-        #self.layers['Dropout4']=Dropout()
+        self.layers['Affine']=Affine(self.params['W5'])
+        self.layers['Dropout4']=Dropout()
 
 
     def predict(self, x):
@@ -126,6 +126,6 @@ class Discriminator:
         grads['W2'] = self.layers['Conv2'].dW
         grads['W3'] = self.layers['Conv3'].dW
         #grads['W4'] = self.layers['Conv4'].dW
-        #grads['W5'] = self.layers['Affine'].dW
+        grads['W5'] = self.layers['Affine'].dW
 
         return grads,dout
