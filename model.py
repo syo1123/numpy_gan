@@ -16,11 +16,11 @@ class Generater:
 
     def __init__(self,input_size=24,output_size=1,weight_init_std = 0.01,train=False):
         self.params = {}
-        self.params['W1'] = np.random.randn(64,20,4,4)
-        self.params['W2'] = np.random.randn(32,64,4,4)
-        self.params['W3'] = np.random.randn(16,32,4,4)
-        self.params['W4'] = np.random.randn(8,16,4,4)
-        self.params['W5'] = np.random.randn(1,8,3,3)
+        self.params['W1'] = np.random.randn(64*3,20,4,4)
+        self.params['W2'] = np.random.randn(64*2,64*3,4,4)
+        self.params['W3'] = np.random.randn(64,64*2,4,4)
+        self.params['W4'] = np.random.randn(32,64,4,4)
+        self.params['W5'] = np.random.randn(1,32,3,3)
 
         path='learned/save.pkl'
         if train:
@@ -84,11 +84,11 @@ class Discriminator:
         self.params['W4']=np.random.randn(28,12,4,4)"""
 
 
-        self.params['W1']=np.random.randn(24,1,6,6)
-        self.params['W2']=np.random.randn(32,24,6,6)
-        self.params['W3']=np.random.randn(64,32,6,6)
+        self.params['W1']=np.random.randn(3,1,6,6)
+        self.params['W2']=np.random.randn(8,3,6,6)
+        self.params['W3']=np.random.randn(12,8,6,6)
         #self.params['W4']=np.random.randn(32,12,4,4)
-        self.params['W5']=np.random.randn(64,2)
+        self.params['W5']=np.random.randn(12,2)
 
 
         self.layers = OrderedDict()
