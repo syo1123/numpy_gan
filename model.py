@@ -14,11 +14,11 @@ class Generater:
 
     def __init__(self,input_size=24,output_size=1,weight_init_std = 0.01,train=False):
         self.params = {}
-        self.params['W1'] = np.random.randn(32*4,20,4,4)
-        self.params['W2'] = np.random.randn(32*3,32*4,4,4)
-        self.params['W3'] = np.random.randn(32*2,32*3,4,4)
-        self.params['W4'] = np.random.randn(32,32*2,4,4)
-        self.params['W5'] = np.random.randn(1,32,3,3)
+        self.params['W1'] = np.random.randn(32,20,4,4)
+        self.params['W2'] = np.random.randn(16,32,4,4)
+        self.params['W3'] = np.random.randn(8,16,4,4)
+        self.params['W4'] = np.random.randn(4,8,4,4)
+        self.params['W5'] = np.random.randn(1,4,3,3)
 
         path='learned/save.pkl'
         if train:
