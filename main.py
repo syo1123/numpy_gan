@@ -50,7 +50,7 @@ for images in data:
 
 
 
-for epoch in range(200):
+for epoch in range(2):
     print("Epoch{}".format(epoch))
     for i in range(len(imgs)):
         batch_size=imgs[i].shape[0]
@@ -86,6 +86,8 @@ for epoch in range(200):
         optimizer_d.update(D.params,grad_d)
 
 
-
+param=['W1','W2','W3','W4','W5']
+for p in param:
+    G.params[p]=np.asnumpy(G.params[p])
 with open('learned/save.pkl','wb') as f:
     pickle.dump(G.params,f)
