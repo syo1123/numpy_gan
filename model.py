@@ -60,7 +60,7 @@ class Generater:
         n=np.arange(1,12,4)
         for i,layer in enumerate(self.layers.values()):
             if i in n[i]:
-                x = layer.forward(x,train_flg=True)
+                x = layer.forward(x,train_flg=False)
             else:
                 x=layer.forward(x)
         self.x=x
