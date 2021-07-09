@@ -66,7 +66,7 @@ for epoch in range(200):
         #Discriminatorでフェイク画像を判定
         pre_f=D.predict(fake)
         #Generater側の損失
-        loss_g=criterion_g.forward(pre_f,t_f)
+        loss_g=criterion_g.forward(pre_f,t_r)
 
         #Generator側の勾配
         dout=criterion_g.backward()

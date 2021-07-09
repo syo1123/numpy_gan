@@ -131,7 +131,7 @@ class ConvolutionT:
         self.pad=pad
         self.stride=stride
         self.W=W
-        
+
         # 中間データ（backward時に使用）
         self.x = None
         self.col = None
@@ -140,17 +140,17 @@ class ConvolutionT:
         # 重み・バイアスパラメータの勾配
         self.dW = None
         self.Conv=Convolution(self.W,stride=stride_f,pad=self.pad)
-        
+
     def forward(self,x):
         N, C, H, W = x.shape
         pad_h=H+H*(self.stride-1)
         pad_w=W+W*(self.stride-1)
         self.x=np.zeros([N,C,pad_h,pad_w])
         self.x[:, :, ::self.stride, ::self.stride]=x
-                        
+
         self.out=self.Conv.forward(self.x)
         return self.out
-    
+
     def backward(self,dout):
         N, C, H, W = dout.shape
         dx=self.Conv.backward(dout)
@@ -158,11 +158,11 @@ class ConvolutionT:
         W_ = int(W/2)
         dx_ = np.zeros((1, 1, H_, W_), dtype=np.float32)
         dx_ = dx[:, :, ::self.stride, ::self.stride]
-        
+
         self.dW=self.Conv.dW
         return dx_
 
-    
+
 class Convolution:
     def __init__(self, W, stride=1, pad=0):
         self.W = W
@@ -261,4 +261,20 @@ class SoftmaxWithLoss:
             dx[np.arange(batch_size), self.t] -= 1
             dx = dx / batch_size
 
+        return dx
+
+class Tanh:
+
+    def __init__(self):
+        self.y = None
+
+    def forward(self, x):
+        self.x = x
+        y = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
+        y = y * 255
+        #y = (y+1)/2 # 0 ~ 1に圧縮
+        return y
+
+    def backward(self, dout=1):
+        dx = 1 / (np.cosh(self.x) * np.cosh(self.x) * 255)
         return dx
