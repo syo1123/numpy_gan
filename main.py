@@ -14,7 +14,7 @@ except:
 import numpy as np
 """
 optimizer_g=Adam(lr=0.000000004)
-optimizer_d=Adam(lr=0.0000000001)
+optimizer_d=Adam(lr=0.0000000000001)
 batch_size=64
 
 criterion_d=SoftmaxWithLoss()
@@ -46,9 +46,7 @@ for images in data:
     imgs.append(images.numpy())
 
 #リアルのラベルとフェイクのラベルを作成
-t_f=np.zeros(batch_size,int)
-t_r=np.ones(batch_size,int)
-t=np.append(t_r,t_f)
+
 
 
 
