@@ -16,8 +16,8 @@ import numpy as np
 """
 beta1=0.0
 beta2=0.9
-optimizer_g=Adam(lr=0.000001,beta1=beta1,beta2=beta2)
-optimizer_d=Adam(lr=0.00004,beta1=beta1,beta2=beta2)
+optimizer_g=Adam(lr=0.01,beta1=beta1,beta2=beta2)
+optimizer_d=Adam(lr=0.04,beta1=beta1,beta2=beta2)
 batch_size=64
 
 criterion_d=SoftmaxWithLoss()
