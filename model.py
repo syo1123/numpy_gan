@@ -86,7 +86,7 @@ class Discriminator:
         self.params['W2']=np.random.randn(8,3,6,6)
         self.params['W3']=np.random.randn(2,8,6,6)
         #self.params['W4']=np.random.randn(32,12,4,4)
-        #self.params['W5']=np.random.randn(12,2)
+        self.params['W5']=np.random.randn(12,2)
 
 
         self.layers = OrderedDict()
