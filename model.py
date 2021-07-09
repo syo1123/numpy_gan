@@ -16,11 +16,11 @@ class Generater:
 
     def __init__(self,input_size=24,output_size=1,weight_init_std = 0.01,train=False):
         self.params = {}
-        self.params['W1'] = np.random.randn(64*3,20,4,4)
-        self.params['W2'] = np.random.randn(64*2,64*3,4,4)
-        self.params['W3'] = np.random.randn(64,64*2,4,4)
-        self.params['W4'] = np.random.randn(32,64,4,4)
-        self.params['W5'] = np.random.randn(1,32,3,3)
+        self.params['W1'] = np.random.randn(64,20,4,4)
+        self.params['W2'] = np.random.randn(32,64,4,4)
+        self.params['W3'] = np.random.randn(16,32,4,4)
+        self.params['W4'] = np.random.randn(8,16,4,4)
+        self.params['W5'] = np.random.randn(1,8,3,3)
 
         path='learned/save.pkl'
         if train:
@@ -86,9 +86,9 @@ class Discriminator:
 
         self.params['W1']=np.random.randn(3,1,6,6)
         self.params['W2']=np.random.randn(8,3,6,6)
-        self.params['W3']=np.random.randn(2,8,6,6)
+        self.params['W3']=np.random.randn(12,8,6,6)
         #self.params['W4']=np.random.randn(32,12,4,4)
-        #self.params['W5']=np.random.randn(12,2)
+        self.params['W5']=np.random.randn(12,2)
 
 
         self.layers = OrderedDict()
@@ -103,8 +103,8 @@ class Discriminator:
         self.layers['Dropout3']=Dropout()
         #self.layers['Conv4'] = Convolution(self.params['W4'],stride=1,pad=0)
         #self.layers['ReLu4']=Relu()
-        #self.layers['Affine']=Affine(self.params['W5'])
-        #self.layers['Dropout4']=Dropout()
+        self.layers['Affine']=Affine(self.params['W5'])
+        self.layers['Dropout4']=Dropout()
 
 
     def predict(self, x):
@@ -128,6 +128,6 @@ class Discriminator:
         grads['W2'] = self.layers['Conv2'].dW
         grads['W3'] = self.layers['Conv3'].dW
         #grads['W4'] = self.layers['Conv4'].dW
-        #grads['W5'] = self.layers['Affine'].dW
+        grads['W5'] = self.layers['Affine'].dW
 
         return grads,dout
