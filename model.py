@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 try:
     import cupy as np
     print("use cupy!")
@@ -8,6 +9,7 @@ import numpy as np
 """
 from collections import OrderedDict
 from layers import *
+
 import pickle
 
 class Generater:
@@ -82,11 +84,11 @@ class Discriminator:
         self.params['W4']=np.random.randn(28,12,4,4)"""
 
 
-        self.params['W1']=np.random.randn(3,1,6,6)
-        self.params['W2']=np.random.randn(8,3,6,6)
-        self.params['W3']=np.random.randn(12,8,6,6)
+        self.params['W1']=np.random.randn(24,1,6,6)
+        self.params['W2']=np.random.randn(32,24,6,6)
+        self.params['W3']=np.random.randn(64,32,6,6)
         #self.params['W4']=np.random.randn(32,12,4,4)
-        self.params['W5']=np.random.randn(12,2)
+        self.params['W5']=np.random.randn(64,2)
 
 
         self.layers = OrderedDict()
