@@ -14,7 +14,7 @@ import pickle
 
 class Generater:
 
-    def __init__(self,input_size=24,output_size=1,weight_init_std = 0.01,train=False):
+    def __init__(self,input_size=100,output_size=1,weight_init_std = 0.01,train=False):
         self.params = {}
         self.params['W1'] = np.random.randn(64*8,100,4,4)
         self.params['W2'] = np.random.randn(64*4,64*8,4,4)
@@ -94,24 +94,24 @@ class Discriminator:
         self.params['W4']=np.random.randn(28,12,4,4)"""
 
 
-        self.params['W1']=np.random.randn(3,1,4,4)
-        self.params['W2']=np.random.randn(8,3,4,4)
-        self.params['W3']=np.random.randn(12,8,4,4)
+        self.params['W1']=np.random.randn(3,1,8,8)
+        self.params['W2']=np.random.randn(8,3,8,8)
+        self.params['W3']=np.random.randn(12,8,6,6)
         self.params['W4']=np.random.randn(32,12,4,4)
         self.params['W5']=np.random.randn(32,2)
 
 
         self.layers = OrderedDict()
-        self.layers['Conv1'] = Convolution(self.params['W1'],stride=2,pad=0)
+        self.layers['Conv1'] = Convolution(self.params['W1'],stride=5,pad=0)
         self.layers['ReLu1']=Relu()
         self.layers['Dropout1']=Dropout()
-        self.layers['Conv2'] = Convolution(self.params['W2'],stride=2,pad=0)
+        self.layers['Conv2'] = Convolution(self.params['W2'],stride=5,pad=0)
         self.layers['ReLu2']=Relu()
         self.layers['Dropout2']=Dropout()
-        self.layers['Conv3'] = Convolution(self.params['W3'],stride=2,pad=0)
+        self.layers['Conv3'] = Convolution(self.params['W3'],stride=3,pad=0)
         self.layers['ReLu3']=Relu()
         self.layers['Dropout3']=Dropout()
-        self.layers['Conv4'] = Convolution(self.params['W4'],stride=3,pad=0)
+        self.layers['Conv4'] = Convolution(self.params['W4'],stride=1,pad=0)
         self.layers['ReLu4']=Relu()
         self.layers['Affine']=Affine(self.params['W5'])
         self.layers['Dropout4']=Dropout()
