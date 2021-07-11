@@ -14,16 +14,16 @@ except:
 """
 import numpy as np
 """
-beta1=0.0
-beta2=0.9
-optimizer_g=Adam(lr=0.0001,beta1=beta1,beta2=beta2)
-optimizer_d=Adam(lr=0.0004,beta1=beta1,beta2=beta2)
-batch_size=64
+beta1=0.5
+beta2=0.99
+optimizer_g=Adam(lr=0.002,beta1=beta1,beta2=beta2)
+optimizer_d=Adam(lr=0.002,beta1=beta1,beta2=beta2)
+batch_size=8
 
 criterion_d=SoftmaxWithLoss()
 criterion_g=SoftmaxWithLoss()
 
-G=Generater(input_size=20,output_size=1)
+G=Generater(input_size=100,output_size=1)
 D=Discriminator()
 
 #data=load_MNIST(batch=batch_size)
@@ -57,7 +57,7 @@ for epoch in range(200):
     print("Epoch{}".format(epoch))
     for i in range(len(imgs)):
         batch_size=imgs[i].shape[0]
-        a=np.random.randn(batch_size,20,1,1)
+        a=np.random.randn(batch_size,100,1,1)
         t_f=np.zeros(batch_size,int)
         t_r=np.ones(batch_size,int)
         t=np.append(t_r,t_f)
