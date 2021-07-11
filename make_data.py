@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -90,4 +91,3 @@ class GAN_Img_Dataset(data.Dataset):
         img_transformed = self.transform(img)
 
         return img_transformed
-

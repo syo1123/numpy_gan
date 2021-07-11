@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 try:
     import cupy as np
     print("use cupy!")
