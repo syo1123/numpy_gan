@@ -279,3 +279,15 @@ class Tanh:
     def backward(self, dout=1):
         dx = 1 / (np.cosh(self.x) * np.cosh(self.x) * 255)
         return dx
+    
+class LeakyRelu:
+    def __init__(self):
+        self.mask = None
+
+    def forward(self, x):
+        out = np.maximum(0.2 * x, x)
+        return out
+
+    def backward(self, dout):
+        out = np.minimum(5*dout, dout)
+        return out
