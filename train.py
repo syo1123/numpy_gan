@@ -120,8 +120,8 @@ data = torch.utils.data.DataLoader(
     train_dataset, batch_size=batch_size, shuffle=True)
 G=Generator()
 D=Discriminator()
-G.apply(weight_init)
-D.apply(weight_init)
+G.apply(weights_init)
+D.apply(weights_init)
 
 G,D=train(G,D,data=data,num_epochs=200)
 model_path_d = 'learned/d.ph'
