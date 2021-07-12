@@ -126,5 +126,5 @@ D.apply(weights_init)
 G,D=train(G,D,data=data,num_epochs=200)
 model_path_d = 'learned/d.ph'
 model_path_g = 'learned/g.ph'
-torch.save(model.to('cpu').state_dict(), model_path_d)
-torch.save(model.to('cpu').state_dict(), model_path_g)
+torch.save(D.to('cpu').state_dict(), model_path_d)
+torch.save(G.to('cpu').state_dict(), model_path_g)
