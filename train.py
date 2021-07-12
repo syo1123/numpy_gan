@@ -60,8 +60,8 @@ def train(G,D,data,num_epochs):
             images=images.to(device)
             batch_size=images.size()[0]
 
-            label_real=torch.full((batch_size,),1.)
-            label_fake=torch.full((batch_size,),0.)
+            label_real=torch.full((batch_size,),1.).to(device)
+            label_fake=torch.full((batch_size,),0.).to(device)
 
             d_out_real=D(images)
 
