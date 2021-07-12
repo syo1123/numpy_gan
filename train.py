@@ -97,7 +97,7 @@ def train(G,D,data,num_epochs):
             epoch_d_loss+=d_loss.item()
             epoch_g_loss+=g_loss.item()
 
-        print('epoch{}|| Epoch_D_loss:{:.4f} || Epoch_G_loss:{:.4f}'.format(epoch,epoch_d_loss/batch_size,epoch_g_loss/batch_size))
+        print('epoch{}|| Epoch_D_loss:{:.4f} || Epoch_G_loss:{:.4f}'.format(epoch,d_loss.item(),g_loss.item()))
 
     return G,D
 
