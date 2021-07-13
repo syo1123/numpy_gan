@@ -38,7 +38,7 @@ class Generator(nn.Module):
             nn.ReLU(inplace=True))
         
         self.last=nn.Sequential(
-            nn.ConvTranspose2d(image_size,1,kernel_size=4,
+            nn.ConvTranspose2d(image_size,3,kernel_size=4,
                                stride=2,padding=1),
             nn.Tanh())
         

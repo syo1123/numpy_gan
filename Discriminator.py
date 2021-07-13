@@ -12,7 +12,7 @@ class Discriminator(nn.Module):
     def __init__(self,z_dim=20,image_size=64):
         super(Discriminator,self).__init__()
         self.layer1=nn.Sequential(
-            nn.Conv2d(1,image_size,kernel_size=4,
+            nn.Conv2d(3,image_size,kernel_size=4,
                       stride=2,padding=1),
             nn.LeakyReLU(0.1,inplace=True))
         
